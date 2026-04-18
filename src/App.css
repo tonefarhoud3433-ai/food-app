@@ -1,0 +1,79 @@
+/* COMMON */
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/inter/Inter-VariableFont_opsz,wght.ttf")
+    format("truetype");
+}
+.auth-container {
+  background-image: url(./assets/images/auth/background\ image.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.bg-overlay {
+  background: linear-gradient(
+    45deg,
+    rgba(47, 140, 96, 0.7),
+    rgba(0, 0, 0, 0.7)
+  );
+}
+.auth-title {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(73, 73, 73, 1);
+}
+.auth-subtitle {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(73, 73, 73, 0.6);
+}
+.auth-input-group {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+.auth-input-group input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 14px;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 1%;
+  vertical-align: bottom;
+}
+.auth-input-group .auth-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+}
+.auth-input-group .divider {
+  width: 1px;
+  height: 30px;
+  background-color: #ccc;
+  margin: 0 10px;
+}
+/* Small devices (≥ 576px) */
+@media (max-width: 576px) {
+  .auth-subtitle {
+    font-size: 12px;
+  }
+  .auth-input-group input {
+    font-size: 12px;
+  }
+  .auth-input-group .auth-icon {
+    font-size: 0.9rem;
+  }
+}
