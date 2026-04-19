@@ -2,6 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import "react-tooltip/dist/react-tooltip.css"
 import './App.css'
 import AuthLayout from './layouts/AuthLayout/AuthLayout'
 import MasterLayout from './layouts/MasterLayout/MasterLayout'

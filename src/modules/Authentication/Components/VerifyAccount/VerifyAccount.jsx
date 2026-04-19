@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -9,9 +10,12 @@ export default function VerifyAccount() {
 
   let {register,handleSubmit,formState:{errors}}=useForm();
 
+    const [loading, setLoading] = useState(false);
+  
 
   const onSubmit=async(data)=>{
     try {
+      setLoading(true)
       const response = await axios.put("https://upskilling-egypt.com:3006/api/v1/Users/verify",data);
       const message = response?.data?.message || "Password reset successful";
       toast.success(message);
@@ -19,6 +23,8 @@ export default function VerifyAccount() {
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
       toast.error(message);
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -65,7 +71,11 @@ export default function VerifyAccount() {
           )} type="text" className="form-control" aria-describedby='otpelpBlock' placeholder="OTP"/>
         </div>
           {errors.code && <span>{errors.code.message}</span>}
-        <button className='btn btn-success w-100'>Send</button>
+        <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
+          {loading ? (
+            <span className="spinner-border spinner-border-sm me-2"></span>
+          ) : "Send"}
+        </button>
       </form>
     </div>
   )

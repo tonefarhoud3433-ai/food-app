@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -9,9 +10,11 @@ export default function ResetPass() {
 
   let {register,handleSubmit,formState:{errors},getValues}=useForm();
 
+  const [loading, setLoading] = useState(false);
 
   const onSubmit=async(data)=>{
     try {
+      setLoading(true)
       const response = await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Reset",data);
       const message = response?.data?.message || "Password reset successful";
       toast.success(message);
@@ -19,6 +22,8 @@ export default function ResetPass() {
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
       toast.error(message);
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -96,7 +101,11 @@ export default function ResetPass() {
           )} type="password" className="form-control" aria-describedby='passwordelpBlock' placeholder="Confirm New Password"/>
         </div>
           {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
-        <button className='btn btn-success w-100'>Reset Password</button>
+        <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
+          {loading ? (
+            <span className="spinner-border spinner-border-sm me-2"></span>
+          ) : "Reset Password"}
+        </button>
       </form>
     </div>
   )

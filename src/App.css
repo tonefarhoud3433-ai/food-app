@@ -104,3 +104,10 @@
     font-size: 12px;
   }
 }
+.auth-btn-colors {
+  background-color: rgba(74, 163, 90, 1);
+  border-color: rgba(74, 163, 90, 1);
+}
+.auth-links-colors {
+  color: rgba(74, 163, 90, 1);
+}

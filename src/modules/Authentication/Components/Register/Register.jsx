@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -9,8 +10,11 @@ export default function Register() {
 
   let {register,handleSubmit,formState:{errors},getValues}=useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit=async(data)=>{
     try {
+      setLoading(true)
       const response = await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Register",data);
       const message = response?.data?.message || "Registered successfully";
       toast.success(message);
@@ -18,6 +22,8 @@ export default function Register() {
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
       toast.error(message);
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -33,7 +39,7 @@ export default function Register() {
         <div className="col-12 col-md-6">
             <div className="auth-input-group mb-1 mb-md-4">
               <span className='auth-icon'>
-                <i className="fa-solid fa-mobile-screen-button"></i>
+                <i className="fa-solid fa-user"></i>
               </span>
               <div className="divider"></div>
               <input {...register("userName",
@@ -51,7 +57,7 @@ export default function Register() {
         <div className="col-12 col-md-6">
             <div className="auth-input-group mb-1 mb-md-4">
               <span className='auth-icon'>
-                <i className="fa-solid fa-mobile-screen-button"></i>
+                <i className="fa-solid fa-envelope"></i>
               </span>
               <div className="divider"></div>
               <input {...register("email",
@@ -69,7 +75,7 @@ export default function Register() {
         <div className="col-12 col-md-6">
             <div className="auth-input-group mb-1 mb-md-4">
               <span className='auth-icon'>
-                <i className="fa-solid fa-mobile-screen-button"></i>
+                <i className="fa-solid fa-earth-europe"></i>
               </span>
               <div className="divider"></div>
               <input {...register("country",
@@ -132,10 +138,14 @@ export default function Register() {
           </div>
         </div>
         <div className="links d-flex justify-content-end my-2 my-md-3">
-          <Link className='text-decoration-none text-success' to="/login">Login Now?</Link>
+          <Link className='text-decoration-none auth-links-colors' to="/login">Login Now?</Link>
         </div>
         <div className="text-center">
-            <button className='btn btn-success w-75'>Register</button>
+            <button className='btn btn-success auth-btn-colors w-75' disabled={loading}>
+              {loading ? (
+                <span className="spinner-border spinner-border-sm me-2"></span>
+              ) : "Register"}
+            </button>
         </div>
       </form>
     </div>
