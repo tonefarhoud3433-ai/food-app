@@ -9,7 +9,7 @@ export default function VerifyAccount() {
 
   const navigate = useNavigate();
 
-  let {register,handleSubmit,formState:{errors},watch}=useForm();
+  let {register,handleSubmit,formState:{errors},watch}=useForm({mode:"onChange"});
 
     const [loading, setLoading] = useState(false);
   
@@ -38,7 +38,9 @@ export default function VerifyAccount() {
         <span className='auth-subtitle'>Please Enter Your Otp  or Check Your Inbox</span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="auth-input-group mb-4">
+        <div className="row gy-2 gy-lg-4 gx-3 gx-lg-5">
+          <div className="col-12">
+            <div className="auth-input-group">
           <span className='auth-icon'>
             <i className="fa-solid fa-envelope"></i>
           </span>
@@ -53,8 +55,10 @@ export default function VerifyAccount() {
           )} data-tooltip-id='email-tooltip' type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
           ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
-          <div className="auth-input-group mb-4">
+          {errors.email && <small className="invalid-feedback d-block">{errors.email.message}</small>}
+          </div>
+          <div className="col-12">
+            <div className="auth-input-group">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
           </span>
@@ -73,8 +77,10 @@ export default function VerifyAccount() {
           )} data-tooltip-id='code-tooltip' type="text" className={`form-control ${errors.code ? "is-invalid" : ""}
           ${!errors.code && watch("code") ? "is-valid" : "" }`} aria-describedby='otpelpBlock' placeholder="OTP"/>
         </div>
-          {errors.code && <Tooltip id='code-tooltip' place='top' defaultIsOpen>{errors.code.message}</Tooltip>}
-        <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
+          {errors.code && <small className="invalid-feedback d-block">{errors.code.message}</small>}
+          </div>
+        </div>
+        <button className='btn btn-success auth-btn-colors w-100 mt-4' disabled={loading}>
           {loading ? (
             <span className="spinner-border spinner-border-sm me-2"></span>
           ) : "Send"}

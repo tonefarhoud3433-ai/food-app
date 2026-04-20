@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Tooltip } from 'react-tooltip';
 
 export default function ForgetPass() {
 
   const navigate = useNavigate();
 
-  let {register,handleSubmit,formState:{errors},watch}=useForm();
+  let {register,handleSubmit,formState:{errors},watch}=useForm({mode:"onChange"});
 
   const [loading,setLoading] = useState(false)
 
@@ -35,7 +34,9 @@ export default function ForgetPass() {
         <span className='auth-subtitle'>No worries! Please enter your email and we will send a password reset link</span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="auth-input-group mb-4">
+        {/* email */}
+        <div className="mb-4">
+          <div className="auth-input-group">
           <span className='auth-icon'>
             <i className="fa-solid fa-envelope"></i>
           </span>
@@ -47,10 +48,11 @@ export default function ForgetPass() {
               message:"Email is not valid"
             }
             }
-          )} type="email" data-tooltip-id='email-tooltip' className={`form-control ${errors.email ? "is-invalid" : ""}
+          )} type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
           ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
+          {errors.email && <small className="invalid-feedback d-block">{errors.email.message}</small>}
+        </div>
         <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
           {loading ? (
             <span className="spinner-border spinner-border-sm me-2"></span>
