@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
+
 
 export default function ResetPass() {
 
   const navigate = useNavigate();
 
-  let {register,handleSubmit,formState:{errors},getValues}=useForm();
+  let {register,handleSubmit,formState:{errors},getValues,watch}=useForm();
 
   const [loading, setLoading] = useState(false);
 
@@ -48,9 +50,10 @@ export default function ResetPass() {
               message:"Email is not valid"
             }
             }
-          )} type="email" className="form-control" aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
+          )} data-tooltip-id='email-tooltip' type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
+          ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
           <div className="auth-input-group mb-4">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
@@ -67,9 +70,10 @@ export default function ResetPass() {
                 message: "OTP must be 4 digits"
               }
             }
-          )} type="text" className="form-control" aria-describedby='otpelpBlock' placeholder="OTP"/>
+          )} data-tooltip-id='seed-tooltip' type="text" className={`form-control ${errors.seed ? "is-invalid" : ""}
+          ${!errors.seed && watch("seed") ? "is-valid" : "" }`} aria-describedby='otpelpBlock' placeholder="OTP"/>
         </div>
-          {errors.seed && <span>{errors.seed.message}</span>}
+          {errors.seed && <Tooltip id='seed-tooltip' place='top' defaultIsOpen>{errors.seed.message}</Tooltip>}
           <div className="auth-input-group mb-4">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
@@ -82,9 +86,10 @@ export default function ResetPass() {
                 message:"Min 8 chars, 1 uppercase, 1 lowercase, 1 number , 1 special character"
               }
             }
-          )} type="password" className="form-control" aria-describedby='passwordelpBlock' placeholder="New Password"/>
+          )} data-tooltip-id='pass-tooltip' type="password" className={`form-control ${errors.password ? "is-invalid" : ""}
+          ${!errors.password && watch("password") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="New Password"/>
         </div>
-          {errors.password && <span>{errors.password.message}</span>}
+          {errors.password && <Tooltip id='pass-tooltip' place='top' defaultIsOpen>{errors.password.message}</Tooltip>}
           <div className="auth-input-group mb-4">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
@@ -98,9 +103,10 @@ export default function ResetPass() {
                 }
               }
             }
-          )} type="password" className="form-control" aria-describedby='passwordelpBlock' placeholder="Confirm New Password"/>
+          )} data-tooltip-id='confirm-tooltip' type="password" className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}
+          ${!errors.confirmPassword && watch("confirmPassword") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Confirm New Password"/>
         </div>
-          {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
+          {errors.confirmPassword && <Tooltip id='confirm-tooltip' place='top' defaultIsOpen>{errors.confirmPassword.message}</Tooltip>}
         <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
           {loading ? (
             <span className="spinner-border spinner-border-sm me-2"></span>

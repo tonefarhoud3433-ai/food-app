@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip'
+
 
 export default function Register() {
 
   const navigate = useNavigate();
 
-  let {register,handleSubmit,formState:{errors},getValues}=useForm();
+  let {register,handleSubmit,formState:{errors},getValues,watch}=useForm();
 
   const [loading, setLoading] = useState(false);
 
@@ -44,14 +46,15 @@ export default function Register() {
               <div className="divider"></div>
               <input {...register("userName",
                 {required:"Field is Required",
-                  maxLength:{
-                    value: 8,
-                    message:"Maximum User Name is 8 characters"
+                  pattern :{
+                    value:/^[a-zA-Z0-9]([a-zA-Z0-9 _-]{2,7})[a-zA-Z0-9]$/,
+                    message: "user must be 4-9 characters (includes special character and number - optional)"
                   }
                 }
-              )} type="text" className="form-control" aria-describedby='userNameelpBlock' placeholder="userName"/>
+              )} data-tooltip-id='user-tooltip' type="text" className={`form-control ${errors.userName ? "is-invalid" : ""}
+          ${!errors.userName && watch("userName") ? "is-valid" : "" }`} aria-describedby='userNameelpBlock' placeholder="userName"/>
             </div>
-          {errors.userName && <span>{errors.userName.message}</span>}
+          {errors.userName && <Tooltip id='user-tooltip' place='top' defaultIsOpen>{errors.userName.message}</Tooltip>}
           </div>
         {/* email */}
         <div className="col-12 col-md-6">
@@ -67,9 +70,10 @@ export default function Register() {
                   message:"Email is not valid"
                 }
                 }
-              )} type="email" className="form-control" aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
+              )} data-tooltip-id='email-tooltip' type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
+          ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
             </div>
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
           </div>
           {/* country */}
         <div className="col-12 col-md-6">
@@ -80,10 +84,15 @@ export default function Register() {
               <div className="divider"></div>
               <input {...register("country",
                 {required:"Field is Required",
+                  pattern : {
+                    value : /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/,
+                    message: "Enter a valid country name (letters only, no spaces at start or end)"
+                  }
                 }
-              )} type="text" className="form-control" aria-describedby='countryelpBlock' placeholder="country "/>
+              )} data-tooltip-id='country-tooltip' type="text" className={`form-control ${errors.country ? "is-invalid" : ""}
+          ${!errors.country && watch("country") ? "is-valid" : "" }`} aria-describedby='countryelpBlock' placeholder="country "/>
             </div>
-          {errors.country && <span>{errors.country.message}</span>}
+          {errors.country && <Tooltip id='country-tooltip' place='top' defaultIsOpen>{errors.country.message}</Tooltip>}
           </div>
           {/* phone number */}
         <div className="col-12 col-md-6">
@@ -95,9 +104,10 @@ export default function Register() {
               <input {...register("phoneNumber",
                 {required:"Field is Required",
                 }
-              )} type="text" className="form-control" aria-describedby='phoneNumberelpBlock' placeholder="phoneNumber "/>
+              )} data-tooltip-id='phone-tooltip' type="text" className={`form-control ${errors.phoneNumber ? "is-invalid" : ""}
+          ${!errors.phoneNumber && watch("phoneNumber") ? "is-valid" : "" }`} aria-describedby='phoneNumberelpBlock' placeholder="phoneNumber "/>
             </div>
-          {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
+          {errors.phoneNumber && <Tooltip id='phone-tooltip' place='top' defaultIsOpen>{errors.phoneNumber.message}</Tooltip>}
           </div>
           {/* password */}
           <div className="col-12 col-md-6">
@@ -113,9 +123,10 @@ export default function Register() {
                 message:"Min 8 chars, 1 uppercase, 1 lowercase, 1 number , 1 special character"
               }
             }
-          )} type="password" className="form-control" aria-describedby='passwordelpBlock' placeholder="Password"/>
+          )} data-tooltip-id='pass-tooltip' type="password" className={`form-control ${errors.password ? "is-invalid" : ""}
+          ${!errors.password && watch("password") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Password"/>
         </div>
-          {errors.password && <span>{errors.password.message}</span>}
+          {errors.password && <Tooltip id='pass-tooltip' place='top' defaultIsOpen>{errors.password.message}</Tooltip>}
           </div>
           {/* confirm password */}
           <div className="col-12 col-md-6">
@@ -132,9 +143,10 @@ export default function Register() {
                 }
               }
             }
-          )} type="password" className="form-control" aria-describedby='passwordelpBlock' placeholder="Confirm Password"/>
+          )} data-tooltip-id='confirm-tooltip' type="password" className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}
+          ${!errors.confirmPassword && watch("confirmPassword") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Confirm Password"/>
         </div>
-          {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
+          {errors.confirmPassword && <Tooltip id='confirm-tooltip' place='top' defaultIsOpen>{errors.confirmPassword.message}</Tooltip>}
           </div>
         </div>
         <div className="links d-flex justify-content-end my-2 my-md-3">

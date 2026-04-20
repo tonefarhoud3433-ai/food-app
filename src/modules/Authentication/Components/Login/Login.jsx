@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip'
 
-export default function Login() {
+export default function Login({saveLoginData}) {
 
   const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ export default function Login() {
       setLoading(true)
       const response = await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login",data);
       localStorage.setItem("token",response.data.token);
+      saveLoginData();
       toast.success("Logged Successfully");
       navigate("/dashboard");
     } catch (error) {
@@ -50,7 +51,7 @@ export default function Login() {
           )} data-tooltip-id='email-tooltip' type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
           ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <Tooltip id='email-tooltip' place='top'>{errors.email.message}</Tooltip>}
+          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
         <div className="auth-input-group">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
@@ -66,7 +67,7 @@ export default function Login() {
           )} type="password" data-tooltip-id='password-tooltip' className={`form-control ${errors.password ? "is-invalid" : ""}
           ${!errors.password && watch("password") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Password"/>
         </div>
-          {errors.password && <Tooltip id='password-tooltip' place='top'>{errors.password.message}</Tooltip>}
+          {errors.password && <Tooltip id='password-tooltip' place='top' defaultIsOpen>{errors.password.message}</Tooltip>}
         <div className="links d-flex justify-content-between my-3">
           <Link className='text-muted text-decoration-none' to="/register">Register Now?</Link>
           <Link className='auth-links-colors text-decoration-none' to="/forget-pass">Forget Password?</Link>

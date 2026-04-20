@@ -50,7 +50,7 @@ export default function ForgetPass() {
           )} type="email" data-tooltip-id='email-tooltip' className={`form-control ${errors.email ? "is-invalid" : ""}
           ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <Tooltip id='email-tooltip' place='top'>{errors.email.message}</Tooltip>}
+          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
         <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
           {loading ? (
             <span className="spinner-border spinner-border-sm me-2"></span>

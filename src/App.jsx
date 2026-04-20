@@ -19,8 +19,26 @@ import RecipesList from "./modules/Recipes/Components/RecipesList/RecipesList"
 import NotFound from './modules/Shared/Components/NotFound/NotFound'
 import UsersList from "./modules/Users/Components/UsersList/UsersList"
 import ProtectedRoutes from './routes/ProtectedRoutes/ProtectedRoutes'
+import { useEffect, useState } from "react"
+import { jwtDecode } from "jwt-decode"
 
 function App() {
+  // move then improve
+  // lifting state up 
+  // poc proof of concept
+  const [loginData, setLoginData] = useState(null);
+
+  const saveLoginData = () =>{
+  const encodedToken =  localStorage.getItem("token");
+  const decodedToken = jwtDecode(encodedToken);
+  setLoginData(decodedToken);
+  }
+
+  useEffect(()=>{
+    if(localStorage.getItem("token")){
+      saveLoginData()
+    }
+  },[])
 
   const routes = createBrowserRouter([
     // Auth Routes
@@ -28,8 +46,8 @@ function App() {
     element:<AuthLayout/>,
     errorElement:<NotFound/>,
       children: [
-        {index:true,element:<Login/>},
-        {path:"login",element:<Login/>},
+        {index:true,element:<Login saveLoginData={saveLoginData} />},
+        {path:"login",element:<Login saveLoginData={saveLoginData} />},
         {path:"register",element:<Register/>},
         {path:"forget-pass",element:<ForgetPass/>},
         {path:"reset-pass",element:<ResetPass/>},
@@ -39,11 +57,7 @@ function App() {
     // Master Routes
     {
       path:"dashboard",
-      element:(
-        <ProtectedRoutes>
-          <MasterLayout/>
-        </ProtectedRoutes>
-      ),
+      element:<ProtectedRoutes loginData={loginData}><MasterLayout loginData={loginData} setLoginData={setLoginData}/></ProtectedRoutes>,
       errorElement:<NotFound/>,
       children:[
         {index:true,element:<Dashboard/>},

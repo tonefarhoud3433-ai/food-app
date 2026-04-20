@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 
 export default function VerifyAccount() {
 
   const navigate = useNavigate();
 
-  let {register,handleSubmit,formState:{errors}}=useForm();
+  let {register,handleSubmit,formState:{errors},watch}=useForm();
 
     const [loading, setLoading] = useState(false);
   
@@ -49,9 +50,10 @@ export default function VerifyAccount() {
               message:"Email is not valid"
             }
             }
-          )} type="email" className="form-control" aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
+          )} data-tooltip-id='email-tooltip' type="email" className={`form-control ${errors.email ? "is-invalid" : ""}
+          ${!errors.email && watch("email") ? "is-valid" : "" }`} aria-describedby='emailelpBlock' placeholder="Enter your E-mail"/>
         </div>
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email && <Tooltip id='email-tooltip' place='top' defaultIsOpen>{errors.email.message}</Tooltip>}
           <div className="auth-input-group mb-4">
           <span className='auth-icon'>
             <i className="fa-solid fa-lock"></i>
@@ -68,9 +70,10 @@ export default function VerifyAccount() {
                 message: "OTP must be 4 digits"
               }
             }
-          )} type="text" className="form-control" aria-describedby='otpelpBlock' placeholder="OTP"/>
+          )} data-tooltip-id='code-tooltip' type="text" className={`form-control ${errors.code ? "is-invalid" : ""}
+          ${!errors.code && watch("code") ? "is-valid" : "" }`} aria-describedby='otpelpBlock' placeholder="OTP"/>
         </div>
-          {errors.code && <span>{errors.code.message}</span>}
+          {errors.code && <Tooltip id='code-tooltip' place='top' defaultIsOpen>{errors.code.message}</Tooltip>}
         <button className='btn btn-success auth-btn-colors w-100' disabled={loading}>
           {loading ? (
             <span className="spinner-border spinner-border-sm me-2"></span>
