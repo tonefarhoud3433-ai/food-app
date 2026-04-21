@@ -12,6 +12,8 @@ export default function ResetPass() {
   let {register,handleSubmit,formState:{errors},getValues,watch}=useForm({mode:"onChange"});
 
   const [loading, setLoading] = useState(false);
+  const [showPassword,setShowPassword]= useState(false);
+  const [showConfirmPassword,setShowConfirmPassword]= useState(false);
 
   const onSubmit=async(data)=>{
     try {
@@ -94,8 +96,11 @@ export default function ResetPass() {
                 message:"Min 8 chars, 1 uppercase, 1 lowercase, 1 number , 1 special character"
               }
             }
-          )} type="password" className={`form-control ${errors.password ? "is-invalid" : ""}
+          )} type={`${showPassword ? "text" : "password"}`} className={`form-control ${errors.password ? "is-invalid" : ""}
           ${!errors.password && watch("password") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="New Password"/>
+          <span className='auth-icon'>
+            <i style={{cursor:"pointer"}} onClick={()=> setShowPassword(!showPassword)} className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </span>
         </div>
           {errors.password && <small className="invalid-feedback d-block">{errors.password.message}</small>}
           </div>
@@ -114,8 +119,11 @@ export default function ResetPass() {
                 }
               }
             }
-          )} type="password" className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}
+          )} type={`${showConfirmPassword ? "text" : "password"}`} className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}
           ${!errors.confirmPassword && watch("confirmPassword") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Confirm New Password"/>
+          <span className='auth-icon'>
+            <i style={{cursor:"pointer"}} onClick={()=> setShowConfirmPassword(!showConfirmPassword)} className={`fa ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </span>
         </div>
           {errors.confirmPassword && <small className="invalid-feedback d-block">{errors.confirmPassword.message}</small>}
           </div>

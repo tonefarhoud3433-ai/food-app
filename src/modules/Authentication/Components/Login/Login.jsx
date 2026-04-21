@@ -11,6 +11,7 @@ export default function Login({saveLoginData}) {
   let {register,handleSubmit,formState:{errors},watch}=useForm({mode:"onChange"});
 
   const [loading, setLoading] = useState(false);
+  const [showPassword,setShowPassword] = useState(false);
 
   const onSubmit=async(data)=>{
     try {
@@ -65,12 +66,15 @@ export default function Login({saveLoginData}) {
           <input {...register("password",
             {required:"Field is Required",
               pattern:{
-                value:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                value:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
                 message:"Password must contain uppercase, lowercase and number"
               }
             }
-          )} type="password" className={`form-control ${errors.password ? "is-invalid" : ""}
+          )} type={`${showPassword ? "text" : "password"}`} className={`form-control ${errors.password ? "is-invalid" : ""}
           ${!errors.password && watch("password") ? "is-valid" : "" }`} aria-describedby='passwordelpBlock' placeholder="Password"/>
+          <span className='auth-icon'>
+            <i style={{cursor:"pointer"}} onClick={()=> setShowPassword(!showPassword)} className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </span>
         </div>
           {errors.password && <small className="invalid-feedback d-block">{errors.password.message}</small>}
         </div>
