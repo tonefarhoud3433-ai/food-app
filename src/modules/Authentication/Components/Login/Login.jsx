@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axiosClient from '../../../../api/axiosClient';
 
 export default function Login({saveLoginData}) {
 
@@ -16,7 +16,7 @@ export default function Login({saveLoginData}) {
   const onSubmit=async(data)=>{
     try {
       setLoading(true)
-      const response = await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login",data);
+      const response = await axiosClient.post("/Users/Login",data);
       localStorage.setItem("token",response.data.token);
       saveLoginData();
       toast.success("Logged Successfully");
