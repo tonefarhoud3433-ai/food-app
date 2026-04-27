@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import { AuthAPI } from '../../../../api';
 
 export default function Login({saveLoginData}) {
 
@@ -16,7 +16,7 @@ export default function Login({saveLoginData}) {
   const onSubmit=async(data)=>{
     try {
       setLoading(true)
-      const response = await axiosClient.post("/Users/Login",data);
+      const response = await AuthAPI.login(data);
       localStorage.setItem("token",response.data.token);
       saveLoginData();
       toast.success("Logged Successfully");

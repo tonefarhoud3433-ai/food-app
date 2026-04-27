@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import { AuthAPI } from '../../../../api';
 
 export default function ResetPass() {
 
@@ -17,7 +17,7 @@ export default function ResetPass() {
   const onSubmit=async(data)=>{
     try {
       setLoading(true)
-      const response = await axiosClient.post("/Users/Reset",data);
+      const response = await AuthAPI.reset(data)
       const message = response?.data?.message || "Password reset successful";
       toast.success(message);
       navigate("/login");

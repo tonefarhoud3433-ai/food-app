@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axiosClient from '../../../../api/axiosClient';
+import { AuthAPI } from '../../../../api';
 
 export default function Register() {
 
@@ -17,7 +17,7 @@ export default function Register() {
   const onSubmit=async(data)=>{
     try {
       setLoading(true)
-      const response = await axiosClient.post("/v1/Users/Register",data);
+      const response = await AuthAPI.register(data)
       const message = response?.data?.message || "Registered successfully";
       toast.success(message);
       navigate("/verify-acc");
