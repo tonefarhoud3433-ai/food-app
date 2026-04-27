@@ -111,3 +111,29 @@
 .auth-links-colors {
   color: rgba(74, 163, 90, 1);
 }
+.avatar-bg {
+  background-color: rgba(244, 206, 155, 1);
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.red-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 70%;
+  border: 1px solid white;
+  background-color: rgba(236, 82, 82, 1);
+  padding: 0.25rem;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.header-bg {
+  background-image: url(./assets/images/common/header.png);
+  background-size: cover;
+  background-position: center;
+}

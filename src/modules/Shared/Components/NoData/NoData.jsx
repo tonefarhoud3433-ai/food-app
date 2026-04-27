@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function NoData() {
-  return (
-    <div>
-      NoData
-    </div>
-  )
+  return <div>NoData</div>;
 }

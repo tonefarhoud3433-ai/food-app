@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "../../modules/Shared/Components/Header/Header";
-import Navbar from "../../modules/Shared/Components/NavBar/Navbar";
+import Navbar from "../../modules/Shared/Components/Navbar/Navbar";
 import Sidebar from "../../modules/Shared/Components/Sidebar/Sidebar";
 
 export default function MasterLayout({ loginData, setLoginData }) {
@@ -11,7 +11,6 @@ export default function MasterLayout({ loginData, setLoginData }) {
       </div>
       <div className="w-100">
         <Navbar loginData={loginData} />
-        <Header />
         <Outlet />
       </div>
     </div>
