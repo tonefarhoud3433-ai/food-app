@@ -1,16 +1,16 @@
 import { Outlet } from "react-router-dom";
 import Header from "../../modules/Shared/Components/Header/Header";
-import Navbar from "../../modules/Shared/Components/Navbar/Navbar";
-import Sidebar from "../../modules/Shared/Components/Sidebar/Sidebar";
+import NavBar from "../../modules/Shared/Components/Navbar/NavBar";
+import SideBar from "../../modules/Shared/Components/Sidebar/SideBar";
 
 export default function MasterLayout({ loginData, setLoginData }) {
   return (
-    <div className="d-flex">
-      <div className="w-25">
-        <Sidebar setLoginData={setLoginData} />
+    <div className="d-flex ">
+      <div>
+        <SideBar setLoginData={setLoginData} />
       </div>
       <div className="w-100">
-        <Navbar loginData={loginData} />
+        <NavBar loginData={loginData} />
         <Outlet />
       </div>
     </div>

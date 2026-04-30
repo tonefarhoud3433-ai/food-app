@@ -1,5 +1,5 @@
 import userImg from "../../../../assets/images/common/avatar.png";
-export default function Navbar({ loginData }) {
+export default function NavBar({ loginData }) {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary m-3 rounded rounded-4">
