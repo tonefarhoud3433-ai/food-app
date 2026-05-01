@@ -163,3 +163,15 @@
   background-color: rgba(0, 146, 77, 0.1) !important;
   border-left: 3px solid rgba(0, 146, 71, 1);
 }
+.add-btn {
+  transition: all 0.5s;
+  background-color: rgba(0, 146, 71, 1);
+  border-color: rgba(0, 146, 71, 1);
+}
+.add-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+.table-header-style {
+  background-color: rgba(226, 229, 235, 1) !important;
+}
