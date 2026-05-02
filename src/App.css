@@ -172,6 +172,22 @@
   transform: translateY(-2px) scale(1.01);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
-.table-header-style {
+.table-header-style th {
   background-color: rgba(226, 229, 235, 1) !important;
+}
+.table-header-style th:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.table-header-style th:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.table td,
+.table th {
+  padding: 25px;
+  border-style: none;
+}
+tbody tr:nth-of-type(even) > * {
+  background-color: rgba(248, 249, 251, 1) !important;
 }

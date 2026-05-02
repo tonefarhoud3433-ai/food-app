@@ -1,39 +1,30 @@
-import { useEffect, useState } from "react";
-import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
-import Header from "../../../Shared/Components/Header/Header";
 import { RecipesAPI } from "../../../../api";
-import { toast } from "react-toastify";
+import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
+import useDeleteItem from "../../../../hooks/useDeleteItem";
+import useFetchList from "../../../../hooks/useFetchList";
+import DataTable from "../../../Shared/Components/DataTable/DataTable";
+import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
-import { Table } from "react-bootstrap";
 
 export default function RecipesList() {
-  const [recipesList, setRecipesList] = useState([]);
+  const {
+    data: recipesList,
+    loading,
+    setData,
+  } = useFetchList(RecipesAPI.getRecipes);
 
-  const getRecipesList = async () => {
-    try {
-      const response = await RecipesAPI.getRecipes();
-      setRecipesList(response?.data?.data);
-    } catch (error) {
-      const message = error.response?.data?.message || "Something went wrong";
-      toast.error(message);
-    }
-  };
+  const { deleteItem } = useDeleteItem(RecipesAPI.deleteRecipe, (id) => {
+    setData((prev) => prev.filter((item) => item.id !== id));
+  });
 
-  const deleteRecipe = async (id) => {
-    try {
-      const response = await RecipesAPI.deleteRecipe(id);
-      getRecipesList();
-      toast.success(response?.data?.message);
-    } catch (error) {
-      const message = error.response?.data?.message || "Something went wrong";
-      toast.error(message);
-    }
-  };
+  const columns = [
+    { key: "id", label: "#" },
+    { key: "name", label: "Name" },
+    { key: "creationDate", label: "Date" },
+    { key: "category", label: "Category", render: (item) => item.tag.name },
+    { key: "price", label: "Price" },
+  ];
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    getRecipesList();
-  }, []);
   return (
     <>
       <Header
@@ -55,42 +46,17 @@ export default function RecipesList() {
         </div>
         <button className="btn btn-success add-btn">Add New Item</button>
       </div>
-      <div className="m-3">
-        {recipesList.length > 0 ? (
-          <Table hover>
-            <thead className="table-header-style">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Creation Date</th>
-                <th scope="col">Category</th>
-                <th scope="col">Price</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recipesList.map((item) => (
-                <tr key={item.id}>
-                  <th scope="row">{item.id}</th>
-                  <td>{item.name}</td>
-                  <td>{item.creationDate}</td>
-                  <td>{item.tag.name}</td>
-                  <td>{item.price}</td>
-                  <td>
-                    <i
-                      className="fa fa-edit text-warning mx-2"
-                      style={{ cursor: "pointer" }}
-                    ></i>
-                    <i
-                      onClick={() => deleteRecipe(item.id)}
-                      className="fa fa-trash text-danger"
-                      style={{ cursor: "pointer" }}
-                    ></i>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+      <div className="table-container m-3">
+        {loading ? (
+          <div className="d-flex justify-content-center">
+            <span className="spinner-border spinner-border-sm me-2 text-success"></span>
+          </div>
+        ) : recipesList?.length > 0 ? (
+          <DataTable
+            columns={columns}
+            data={RecipesList}
+            onDelete={deleteItem}
+          />
         ) : (
           <NoData />
         )}
