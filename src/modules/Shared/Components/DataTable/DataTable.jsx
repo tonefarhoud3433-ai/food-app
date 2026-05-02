@@ -1,6 +1,12 @@
 import { Table } from "react-bootstrap";
 
-export default function DataTable({ columns, data, onDelete }) {
+export default function DataTable({
+  columns,
+  data,
+  onDelete,
+  onShow,
+  deletingId,
+}) {
   return (
     <>
       <Table hover>
@@ -14,7 +20,7 @@ export default function DataTable({ columns, data, onDelete }) {
         </thead>
 
         <tbody>
-          {data.map((item) => (
+          {data?.map((item) => (
             <tr key={item.id}>
               {columns.map((col) => (
                 <td key={col.key}>
@@ -23,12 +29,19 @@ export default function DataTable({ columns, data, onDelete }) {
               ))}
               {onDelete && (
                 <td>
-                  <i className="fa fa-edit text-warning mx-2"></i>
-                  <i
-                    onClick={() => onDelete(item.id)}
-                    className="fa fa-trash text-danger"
-                    style={{ cursor: "pointer" }}
-                  ></i>
+                  {deletingId === item.id ? (
+                    <span className="spinner-border spinner-border-sm text-danger"></span>
+                  ) : (
+                    <>
+                      <i className="fa fa-edit text-warning mx-2"></i>
+
+                      <i
+                        onClick={() => onShow(item)}
+                        className="fa fa-trash text-danger"
+                        style={{ cursor: "pointer" }}
+                      ></i>
+                    </>
+                  )}
                 </td>
               )}
             </tr>

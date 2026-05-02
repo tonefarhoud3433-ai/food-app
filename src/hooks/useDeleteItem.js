@@ -2,20 +2,22 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function useDeleteItem(apiFn, onSuccess) {
-  const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const deleteItem = async (id) => {
-    setLoading(true);
+    setDeletingId(id);
     try {
       const response = await apiFn(id);
-      toast.success(response?.data?.message);
+      console.log(response);
+      const message = response?.data?.message || "Successfully Deleted";
+      toast.success(message);
       onSuccess?.(id);
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
       toast.error(message);
     } finally {
-      setLoading(false);
+      setDeletingId(null);
     }
   };
-  return { deleteItem, loading };
+  return { deleteItem, deletingId };
 }

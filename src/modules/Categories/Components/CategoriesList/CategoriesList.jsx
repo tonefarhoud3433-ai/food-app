@@ -1,21 +1,35 @@
+import { useState } from "react";
 import { CategoriesAPI } from "../../../../api";
 import headerCateges from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
 import useFetchList from "../../../../hooks/useFetchList";
 import DataTable from "../../../Shared/Components/DataTable/DataTable";
+import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
 
 export default function CategoriesList() {
+  const [show, setShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (item) => {
+    setSelectedItem(item);
+    setShow(true);
+  };
+
   const {
     data: categoriesList,
     loading,
     setData,
   } = useFetchList(CategoriesAPI.getCategories);
 
-  const { deleteItem } = useDeleteItem(CategoriesAPI.deleteCategory, (id) => {
-    setData((prev) => prev.filter((item) => item.id !== id));
-  });
+  const { deleteItem, deletingId } = useDeleteItem(
+    CategoriesAPI.deleteCategory,
+    (id) => {
+      setData((prev) => prev.filter((item) => item.id !== id));
+    },
+  );
 
   const columns = [
     { key: "id", label: "#" },
@@ -37,6 +51,19 @@ export default function CategoriesList() {
         }
         imgUrl={headerCateges}
       />
+
+      <DeleteConfirmation
+        show={show}
+        onClose={handleClose}
+        onConfirm={() => {
+          if (!selectedItem) return;
+          deleteItem(selectedItem.id);
+          handleClose();
+        }}
+        itemName={selectedItem?.name}
+        entityName="User"
+        loading={deletingId === selectedItem}
+      />
       <div className="px-4 py-3 m-3 rounded rounded-4 d-flex justify-content-between align-items-center">
         <div>
           <h4>Categories Table Details</h4>
@@ -54,6 +81,8 @@ export default function CategoriesList() {
             columns={columns}
             data={categoriesList}
             onDelete={deleteItem}
+            deletingId={deletingId}
+            onShow={handleShow}
           />
         ) : (
           <NoData />

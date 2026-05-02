@@ -1,21 +1,35 @@
+import { useState } from "react";
 import { RecipesAPI } from "../../../../api";
 import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
 import useFetchList from "../../../../hooks/useFetchList";
 import DataTable from "../../../Shared/Components/DataTable/DataTable";
+import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
 
 export default function RecipesList() {
+  const [show, setShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (item) => {
+    setSelectedItem(item);
+    setShow(true);
+  };
+
   const {
     data: recipesList,
     loading,
     setData,
   } = useFetchList(RecipesAPI.getRecipes);
 
-  const { deleteItem } = useDeleteItem(RecipesAPI.deleteRecipe, (id) => {
-    setData((prev) => prev.filter((item) => item.id !== id));
-  });
+  const { deleteItem, deletingId } = useDeleteItem(
+    RecipesAPI.deleteRecipe,
+    (id) => {
+      setData((prev) => prev.filter((item) => item.id !== id));
+    },
+  );
 
   const columns = [
     { key: "id", label: "#" },
@@ -39,6 +53,20 @@ export default function RecipesList() {
         }
         imgUrl={headerRecipes}
       />
+
+      <DeleteConfirmation
+        show={show}
+        onClose={handleClose}
+        onConfirm={() => {
+          if (!selectedItem) return;
+          deleteItem(selectedItem.id);
+          handleClose();
+        }}
+        itemName={selectedItem?.name}
+        entityName="User"
+        loading={deletingId === selectedItem}
+      />
+
       <div className="px-4 py-3 m-3 rounded rounded-4 d-flex justify-content-between align-items-center">
         <div>
           <h4>Recipe Table Details</h4>
@@ -54,8 +82,10 @@ export default function RecipesList() {
         ) : recipesList?.length > 0 ? (
           <DataTable
             columns={columns}
-            data={RecipesList}
+            data={recipesList}
             onDelete={deleteItem}
+            deletingId={deletingId}
+            onShow={handleShow}
           />
         ) : (
           <NoData />
