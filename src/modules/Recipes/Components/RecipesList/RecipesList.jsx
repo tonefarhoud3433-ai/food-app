@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { RecipesAPI } from "../../../../api";
 import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
+import useDeleteModal from "../../../../hooks/useDeleteModal";
 import useFetchList from "../../../../hooks/useFetchList";
 import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
@@ -9,14 +9,7 @@ import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
 
 export default function RecipesList() {
-  const [show, setShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const handleClose = () => setShow(false);
-  const handleShow = (item) => {
-    setSelectedItem(item);
-    setShow(true);
-  };
+  const { show, selectedItem, open, close } = useDeleteModal();
 
   const {
     data: recipesList,
@@ -35,7 +28,7 @@ export default function RecipesList() {
     { key: "id", label: "#" },
     { key: "name", label: "Name" },
     { key: "creationDate", label: "Date" },
-    { key: "category", label: "Category", render: (item) => item.tag.name },
+    { key: "category", label: "Category", render: (item) => item?.tag?.name },
     { key: "price", label: "Price" },
   ];
 
@@ -56,15 +49,14 @@ export default function RecipesList() {
 
       <DeleteConfirmation
         show={show}
-        onClose={handleClose}
+        onClose={close}
         onConfirm={() => {
           if (!selectedItem) return;
           deleteItem(selectedItem.id);
-          handleClose();
+          close();
         }}
         itemName={selectedItem?.name}
-        entityName="User"
-        loading={deletingId === selectedItem}
+        entityName="Recipe"
       />
 
       <div className="px-4 py-3 m-3 rounded rounded-4 d-flex justify-content-between align-items-center">
@@ -85,7 +77,7 @@ export default function RecipesList() {
             data={recipesList}
             onDelete={deleteItem}
             deletingId={deletingId}
-            onShow={handleShow}
+            onShow={open}
           />
         ) : (
           <NoData />

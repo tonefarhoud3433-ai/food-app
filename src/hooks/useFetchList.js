@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { showError } from "../utils/toastConfig";
 
 export default function useFetchList(apiCall) {
   const [data, setData] = useState([]);
@@ -12,7 +12,7 @@ export default function useFetchList(apiCall) {
       setData(response?.data?.data || []);
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
-      toast.error(message);
+      showError(message);
     } finally {
       setLoading(false);
     }

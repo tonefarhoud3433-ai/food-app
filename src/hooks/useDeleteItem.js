@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { showError, showSuccess } from "../utils/toastConfig";
 
 export default function useDeleteItem(apiFn, onSuccess) {
   const [deletingId, setDeletingId] = useState(null);
@@ -8,13 +8,12 @@ export default function useDeleteItem(apiFn, onSuccess) {
     setDeletingId(id);
     try {
       const response = await apiFn(id);
-      console.log(response);
       const message = response?.data?.message || "Successfully Deleted";
-      toast.success(message);
+      showSuccess(message);
       onSuccess?.(id);
     } catch (error) {
       const message = error.response?.data?.message || "Something went wrong";
-      toast.error(message);
+      showError(message);
     } finally {
       setDeletingId(null);
     }

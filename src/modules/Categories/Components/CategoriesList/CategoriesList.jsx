@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { CategoriesAPI } from "../../../../api";
 import headerCateges from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
+import useDeleteModal from "../../../../hooks/useDeleteModal";
 import useFetchList from "../../../../hooks/useFetchList";
 import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
@@ -9,26 +9,20 @@ import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
 
 export default function CategoriesList() {
-  const [show, setShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const handleClose = () => setShow(false);
-  const handleShow = (item) => {
-    setSelectedItem(item);
-    setShow(true);
-  };
+  const { show, selectedItem, open, close } = useDeleteModal();
 
   const {
     data: categoriesList,
     loading,
-    setData,
+    refetch,
   } = useFetchList(CategoriesAPI.getCategories);
 
   const { deleteItem, deletingId } = useDeleteItem(
     CategoriesAPI.deleteCategory,
-    (id) => {
-      setData((prev) => prev.filter((item) => item.id !== id));
-    },
+    refetch,
+    // (id) => {
+    //   setData((prev) => prev.filter((item) => item.id !== id));
+    // },
   );
 
   const columns = [
@@ -54,15 +48,14 @@ export default function CategoriesList() {
 
       <DeleteConfirmation
         show={show}
-        onClose={handleClose}
+        onClose={close}
         onConfirm={() => {
           if (!selectedItem) return;
           deleteItem(selectedItem.id);
-          handleClose();
+          close();
         }}
         itemName={selectedItem?.name}
-        entityName="User"
-        loading={deletingId === selectedItem}
+        entityName="Category"
       />
       <div className="px-4 py-3 m-3 rounded rounded-4 d-flex justify-content-between align-items-center">
         <div>
@@ -82,7 +75,7 @@ export default function CategoriesList() {
             data={categoriesList}
             onDelete={deleteItem}
             deletingId={deletingId}
-            onShow={handleShow}
+            onShow={open}
           />
         ) : (
           <NoData />

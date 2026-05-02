@@ -19,7 +19,7 @@ export default function DeleteConfirmation({
             alt="delete confirmation image"
             style={{ maxWidth: "30%" }}
           />
-          <h5 className="my-3">Delete This {entityName}</h5>
+          <h5 className="my-3">Delete This {entityName} ?</h5>
           <p>
             Are you sure you want to delete <strong>{itemName}</strong>? If you
             are sure, click confirm.
@@ -28,7 +28,7 @@ export default function DeleteConfirmation({
 
         <Modal.Footer>
           <Button variant="outline-danger" onClick={onConfirm}>
-            Delete {entityName}
+            Delete {entityName} ?
           </Button>
         </Modal.Footer>
       </Modal>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { UsersAPI } from "../../../../api";
 import headerUsers from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
@@ -7,23 +6,19 @@ import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
+import useDeleteModal from "../../../../hooks/useDeleteModal";
 
 export default function UsersList() {
-  const [show, setShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const { show, selectedItem, open, close } = useDeleteModal();
 
-  const handleClose = () => setShow(false);
-  const handleShow = (item) => {
-    setSelectedItem(item);
-    setShow(true);
-  };
-  const { data: usersList, loading, setData } = useFetchList(UsersAPI.getUsers);
+  const { data: usersList, loading, refetch } = useFetchList(UsersAPI.getUsers);
 
   const { deleteItem, deletingId } = useDeleteItem(
     UsersAPI.deleteUser,
-    (id) => {
-      setData((prev) => prev.filter((item) => item.id !== id));
-    },
+    refetch,
+    // (id) => {
+    //   setData((prev) => prev.filter((item) => item.id !== id));
+    // },
   );
 
   const columns = [
@@ -48,15 +43,14 @@ export default function UsersList() {
 
       <DeleteConfirmation
         show={show}
-        onClose={handleClose}
+        onClose={close}
         onConfirm={() => {
           if (!selectedItem) return;
           deleteItem(selectedItem.id);
-          handleClose();
+          close();
         }}
         itemName={selectedItem?.userName}
         entityName="User"
-        loading={deletingId === selectedItem}
       />
 
       <div className="px-4 py-3 m-3 rounded rounded-4 d-flex justify-content-between align-items-center">
@@ -76,7 +70,7 @@ export default function UsersList() {
             data={usersList}
             onDelete={deleteItem}
             deletingId={deletingId}
-            onShow={handleShow}
+            onShow={open}
           />
         ) : (
           <NoData />
