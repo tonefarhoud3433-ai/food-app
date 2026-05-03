@@ -11,7 +11,7 @@ import useDeleteModal from "../../../../hooks/useDeleteModal";
 export default function UsersList() {
   const { show, selectedItem, open, close } = useDeleteModal();
 
-  const { data: usersList, loading, refetch } = useFetchList(UsersAPI.getUsers);
+  const { data: usersList, refetch } = useFetchList(UsersAPI.getUsers);
 
   const { deleteItem, deletingId } = useDeleteItem(
     UsersAPI.deleteUser,
@@ -46,7 +46,7 @@ export default function UsersList() {
         onClose={close}
         onConfirm={() => {
           if (!selectedItem) return;
-          deleteItem(selectedItem.id);
+          deleteItem(selectedItem);
           close();
         }}
         itemName={selectedItem?.userName}
@@ -60,11 +60,7 @@ export default function UsersList() {
         </div>
       </div>
       <div className="table-container m-3">
-        {loading ? (
-          <div className="d-flex justify-content-center">
-            <span className="spinner-border spinner-border-sm me-2 text-success"></span>
-          </div>
-        ) : usersList?.length > 0 ? (
+        {usersList?.length > 0 ? (
           <DataTable
             columns={columns}
             data={usersList}

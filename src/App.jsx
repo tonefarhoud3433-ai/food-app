@@ -21,6 +21,7 @@ import UsersList from "./modules/Users/Components/UsersList/UsersList";
 import ProtectedRoutes from "./routes/ProtectedRoutes/ProtectedRoutes";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import AddRecipe from "./modules/Recipes/Components/AddRecipe/AddRecipe";
 
 function App() {
   // move then improve
@@ -71,6 +72,7 @@ function App() {
         { path: "users", element: <UsersList /> },
         { path: "recipes", element: <RecipesList /> },
         { path: "recipe-data", element: <RecipeData /> },
+        { path: "recipes/add-recipe", element: <AddRecipe /> },
         { path: "categories", element: <CategoriesList /> },
         { path: "favorites", element: <FavList /> },
       ],

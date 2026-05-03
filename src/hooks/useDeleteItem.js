@@ -4,11 +4,13 @@ import { showError, showSuccess } from "../utils/toastConfig";
 export default function useDeleteItem(apiFn, onSuccess) {
   const [deletingId, setDeletingId] = useState(null);
 
-  const deleteItem = async (id) => {
+  const deleteItem = async (item) => {
+    const id = item?.id;
+    const name = item?.name || item?.userName;
     setDeletingId(id);
     try {
       const response = await apiFn(id);
-      const message = response?.data?.message || "Successfully Deleted";
+      const message = response?.data?.message || `Successfully Deleted ${name}`;
       showSuccess(message);
       onSuccess?.(id);
     } catch (error) {

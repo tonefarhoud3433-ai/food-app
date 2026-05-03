@@ -23,12 +23,12 @@ export default function DataTable({
           {data?.map((item) => (
             <tr key={item.id}>
               {columns.map((col) => (
-                <td key={col.key}>
+                <td key={col.key} className="align-middle">
                   {col.render ? col.render(item) : item[col.key]}
                 </td>
               ))}
               {onDelete && (
-                <td>
+                <td className="align-middle">
                   {deletingId === item.id ? (
                     <span className="spinner-border spinner-border-sm text-danger"></span>
                   ) : (

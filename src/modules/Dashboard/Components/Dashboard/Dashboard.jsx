@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../../Shared/Components/Header/Header";
 import headerGirl from "../../../../assets/images/common/headerGirl.png";
+import RecipeHeader from "../../../Shared/Components/RecipeHeader/RecipeHeader";
 
 export default function Dashboard({ loginData }) {
   return (
@@ -18,6 +19,7 @@ export default function Dashboard({ loginData }) {
         imgUrl={headerGirl}
         imgClass={"w-75"}
       />
+      <RecipeHeader />
     </>
   );
 }

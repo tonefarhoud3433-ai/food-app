@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { RecipesAPI } from "../../../../api";
 import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
@@ -7,27 +8,43 @@ import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
+import noDataImage from "../../../../assets/images/common/no-data.png";
 
 export default function RecipesList() {
+  const navigate = useNavigate();
+
   const { show, selectedItem, open, close } = useDeleteModal();
 
-  const {
-    data: recipesList,
-    loading,
-    setData,
-  } = useFetchList(RecipesAPI.getRecipes);
+  const { data: recipesList, refetch } = useFetchList(RecipesAPI.getRecipes);
 
   const { deleteItem, deletingId } = useDeleteItem(
     RecipesAPI.deleteRecipe,
-    (id) => {
-      setData((prev) => prev.filter((item) => item.id !== id));
-    },
+    refetch,
   );
 
   const columns = [
     { key: "id", label: "#" },
     { key: "name", label: "Name" },
-    { key: "creationDate", label: "Date" },
+    {
+      key: "recipeImage",
+      label: "Image",
+      render: (item) => (
+        <img
+          src={`https://upskilling-egypt.com:3006/${item?.imagePath}`}
+          alt="recipe image"
+          onError={(e) => (e.target.src = noDataImage)}
+          style={{ width: "50px", height: "50px", objectFit: "contain" }}
+        />
+      ),
+    },
+    {
+      key: "creationDate",
+      label: "Date",
+      render: (item) =>
+        item?.creationDate
+          ? new Date(item.creationDate).toLocaleDateString()
+          : "-",
+    },
     { key: "category", label: "Category", render: (item) => item?.tag?.name },
     { key: "price", label: "Price" },
   ];
@@ -52,7 +69,7 @@ export default function RecipesList() {
         onClose={close}
         onConfirm={() => {
           if (!selectedItem) return;
-          deleteItem(selectedItem.id);
+          deleteItem(selectedItem);
           close();
         }}
         itemName={selectedItem?.name}
@@ -64,14 +81,15 @@ export default function RecipesList() {
           <h4>Recipe Table Details</h4>
           <p>You can check all details </p>
         </div>
-        <button className="btn btn-success add-btn">Add New Item</button>
+        <button
+          className="btn btn-success add-btn"
+          onClick={() => navigate("add-recipe")}
+        >
+          Add New Recipe
+        </button>
       </div>
       <div className="table-container m-3">
-        {loading ? (
-          <div className="d-flex justify-content-center">
-            <span className="spinner-border spinner-border-sm me-2 text-success"></span>
-          </div>
-        ) : recipesList?.length > 0 ? (
+        {recipesList?.length > 0 ? (
           <DataTable
             columns={columns}
             data={recipesList}
