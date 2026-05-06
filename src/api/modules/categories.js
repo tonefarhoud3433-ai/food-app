@@ -9,8 +9,8 @@ export const getCategories = () => {
 export const getCategoryById = (id) => {
   return axiosClient.get(`/Category/${id}`);
 };
-export const updateCategory = (id) => {
-  return axiosClient.put(`/Category/${id}`);
+export const updateCategory = (id, data) => {
+  return axiosClient.put(`/Category/${id}`, data);
 };
 export const deleteCategory = (id) => {
   return axiosClient.delete(`/Category/${id}`);

@@ -9,8 +9,8 @@ export const getRecipes = () => {
 export const getRecipeById = (id) => {
   return axiosClient.get(`/Recipe/${id}`);
 };
-export const updateRecipe = (id) => {
-  return axiosClient.put(`/Recipe/${id}`);
+export const updateRecipe = (id, data) => {
+  return axiosClient.put(`/Recipe/${id}`, data);
 };
 export const deleteRecipe = (id) => {
   return axiosClient.delete(`/Recipe/${id}`);

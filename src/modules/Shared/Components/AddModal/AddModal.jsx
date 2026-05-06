@@ -8,12 +8,16 @@ export default function AddModal({
   title,
   children,
   loading,
+  editingItem,
+  updateLoading,
 }) {
   return (
     <>
       <Modal show={showAdd} onHide={handleAddClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Add New {title}</Modal.Title>
+          <Modal.Title>
+            {editingItem ? "Update" : "Add New"} {title}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-end">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -22,7 +26,7 @@ export default function AddModal({
               type="submit"
               className={`${loading ? "btn btn-success disabled" : "btn btn-success"}`}
             >
-              {loading ? "Saving..." : "Save"}
+              {loading || updateLoading ? "Saving..." : "Save"}
             </button>
           </form>
         </Modal.Body>

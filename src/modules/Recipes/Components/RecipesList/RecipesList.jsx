@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { RecipesAPI } from "../../../../api";
 import headerRecipes from "../../../../assets/images/common/headerAllSections.png";
+import noDataImage from "../../../../assets/images/common/no-data.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
 import useDeleteModal from "../../../../hooks/useDeleteModal";
 import useFetchList from "../../../../hooks/useFetchList";
@@ -8,7 +9,6 @@ import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
-import noDataImage from "../../../../assets/images/common/no-data.png";
 
 export default function RecipesList() {
   const navigate = useNavigate();
@@ -96,6 +96,7 @@ export default function RecipesList() {
             onDelete={deleteItem}
             deletingId={deletingId}
             onShow={open}
+            onEdit={(item) => navigate(`edit-recipe/${item.id}`)}
           />
         ) : (
           <NoData />

@@ -11,11 +11,22 @@ import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
+import useUpdateItem from "../../../../hooks/useUpdateItem";
 
 export default function CategoriesList() {
+  const [editingItem, setEditingItem] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const handleAddClose = () => setShowAdd(false);
-  const handleAddShow = () => setShowAdd(true);
+  const handleAddShow = () => {
+    setEditingItem(null);
+    reset({ name: "" });
+    setShowAdd(true);
+  };
+  const handleEditShow = (item) => {
+    setEditingItem(item);
+    reset({ name: item.name });
+    setShowAdd(true);
+  };
 
   let {
     register,
@@ -42,6 +53,12 @@ export default function CategoriesList() {
     CategoriesAPI.createCategory,
     refetch,
   );
+
+  const {
+    updateItem,
+    loading: updateLoading,
+    updatingId,
+  } = useUpdateItem(CategoriesAPI.updateCategory, refetch);
 
   const columns = [
     { key: "id", label: "#" },
@@ -89,11 +106,22 @@ export default function CategoriesList() {
         title="Category"
         handleSubmit={handleSubmit}
         onSubmit={async (data) => {
-          const success = await createItem(data);
-          if (success) handleAddClose();
-          reset();
+          let success;
+
+          if (editingItem) {
+            success = await updateItem(editingItem?.id, data);
+          } else {
+            success = await createItem(data);
+          }
+
+          if (success) {
+            handleAddClose();
+            setEditingItem(null);
+            reset();
+          }
         }}
-        loading={loading}
+        loading={loading || updateLoading}
+        editingItem={editingItem}
       >
         <div className="input-group my-2">
           <input
@@ -123,6 +151,8 @@ export default function CategoriesList() {
             onDelete={deleteItem}
             deletingId={deletingId}
             onShow={open}
+            onEdit={handleEditShow}
+            updatingId={updatingId}
           />
         ) : (
           <NoData />

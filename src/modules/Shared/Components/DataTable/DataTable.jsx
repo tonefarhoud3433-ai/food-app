@@ -6,10 +6,12 @@ export default function DataTable({
   onDelete,
   onShow,
   deletingId,
+  onEdit,
+  updatingId,
 }) {
   return (
     <>
-      <Table hover>
+      <Table hover responsive>
         <thead className="table-header-style">
           <tr>
             {columns.map((col) => (
@@ -33,7 +35,15 @@ export default function DataTable({
                     <span className="spinner-border spinner-border-sm text-danger"></span>
                   ) : (
                     <>
-                      <i className="fa fa-edit text-warning mx-2"></i>
+                      {updatingId === item.id ? (
+                        <span className="spinner-border spinner-border-sm text-warning mx-2"></span>
+                      ) : (
+                        <i
+                          onClick={() => onEdit(item)}
+                          className="fa fa-edit text-warning mx-2"
+                          style={{ cursor: "pointer" }}
+                        ></i>
+                      )}
 
                       <i
                         onClick={() => onShow(item)}

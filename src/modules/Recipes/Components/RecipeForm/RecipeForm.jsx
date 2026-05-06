@@ -6,6 +6,8 @@ export default function RecipeForm({
   categoriesList,
   tagsList,
   setImageFile,
+  imagePreview,
+  setImagePreview,
 }) {
   return (
     <>
@@ -24,7 +26,7 @@ export default function RecipeForm({
             {...register("tagId", { required: "Tag is Required" })}
             className="form-control"
           >
-            <option value=""></option>
+            <option value="">Choose Tag</option>
             {tagsList?.map((tag) => (
               <option key={tag?.id} value={tag?.id}>
                 {tag?.name}
@@ -43,8 +45,13 @@ export default function RecipeForm({
         </div>
         {errors.price && <p className="text-danger">{errors.price.message}</p>}
         <div className="input-group my-2">
-          <select {...register("categoriesIds")} className="form-control">
-            <option value=""></option>
+          <select
+            {...register("categoriesIds", {
+              required: "This Field is Required",
+            })}
+            className="form-control"
+          >
+            <option value="">Choose Category</option>
             {categoriesList.map((category) => (
               <option key={category?.id} value={category?.id}>
                 {category?.name}
@@ -68,19 +75,77 @@ export default function RecipeForm({
         {errors.description && (
           <p className="text-danger">{errors.description.message}</p>
         )}
-        <div className="input-group my-2">
-          <input
-            {...register("recipeImage")}
-            type="file"
-            className="form-control"
-            onChange={(e) => {
-              setImageFile(e.target.files[0]);
+        <div className="my-3">
+          <div
+            style={{
+              border: "2px dashed #28a745",
+              borderRadius: "10px",
+              padding: "20px",
+              textAlign: "center",
+              cursor: "pointer",
+              background: "#f9f9f9",
+              position: "relative",
             }}
-          />
+          >
+            {/* preview */}
+            {imagePreview ? (
+              <div style={{ position: "relative" }}>
+                <img
+                  src={imagePreview}
+                  alt="preview"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                />
+
+                {/* change button */}
+                <p style={{ fontSize: "14px", color: "#666" }}>
+                  Click to change image
+                </p>
+              </div>
+            ) : (
+              <>
+                <i className="fa fa-upload fs-3 text-success"></i>
+                <p className="mt-2 mb-0">
+                  Drag & Drop or <span className="text-success">Choose</span>{" "}
+                  image
+                </p>
+              </>
+            )}
+
+            <input
+              {...register("recipeImage")}
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setImageFile(file);
+
+                // preview instantly
+                if (file) {
+                  const previewUrl = URL.createObjectURL(file);
+                  if (typeof window !== "undefined") {
+                    setImagePreview(previewUrl);
+                  }
+                }
+              }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0,
+                cursor: "pointer",
+              }}
+            />
+          </div>
+
+          {errors.recipeImage && (
+            <p className="text-danger mt-1">{errors.recipeImage.message}</p>
+          )}
         </div>
-        {errors.recipeImage && (
-          <p className="text-danger">{errors.recipeImage.message}</p>
-        )}
       </>
     </>
   );

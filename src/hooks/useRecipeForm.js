@@ -26,7 +26,6 @@ export default function useRecipeForm(onSuccess) {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     getCategories();
     getTags();
   }, []);
@@ -59,11 +58,59 @@ export default function useRecipeForm(onSuccess) {
     }
   };
 
+  const updateRecipe = async (id, data, oldImage) => {
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("description", data.description);
+    formData.append("tagId", data.tagId);
+    formData.append("categoriesIds", data.categoriesIds);
+
+    // image
+
+    const getImageFileFromUrl = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new File([blob], "image.jpg", { type: blob.type });
+    };
+
+    let fileToSend = imageFile;
+
+    if (!imageFile && oldImage) {
+      fileToSend = await getImageFileFromUrl(
+        `https://upskilling-egypt.com:3006/${oldImage}`,
+      );
+    }
+
+    if (fileToSend) {
+      formData.append("recipeImage", fileToSend);
+    }
+
+    setLoading(true);
+
+    try {
+      const { data } = await RecipesAPI.updateRecipe(id, formData);
+
+      showSuccess(data?.message || `Updated successfully ${data.name}`);
+
+      onSuccess?.();
+
+      return true;
+    } catch (error) {
+      showError(error.response?.data?.message || "Something went wrong");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     categoriesList,
     tagsList,
     setImageFile,
     createRecipe,
+    updateRecipe,
     loading,
   };
 }
