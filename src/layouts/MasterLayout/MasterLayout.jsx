@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../../modules/Shared/Components/Header/Header";
-import NavBar from "../../modules/Shared/Components/Navbar/NavBar";
-import SideBar from "../../modules/Shared/Components/Sidebar/SideBar";
+import SideBar from "../../modules/Shared/Components/SideBar/SideBar";
+import NavBar from "../../modules/Shared/Components/NavBar/NavBar";
 
 export default function MasterLayout() {
   return (
