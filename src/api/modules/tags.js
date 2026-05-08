@@ -1,5 +1,5 @@
 import axiosClient from "../axiosClient";
 
-export const getTags = () => {
-  return axiosClient.get("/tag");
+export const getTags = (params) => {
+  return axiosClient.get("/tag", { params });
 };

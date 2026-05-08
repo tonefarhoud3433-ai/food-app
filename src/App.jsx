@@ -14,33 +14,17 @@ import VerifyAccount from "./modules/Authentication/Components/VerifyAccount/Ver
 import CategoriesList from "./modules/Categories/Components/CategoriesList/CategoriesList";
 import Dashboard from "./modules/Dashboard/Components/Dashboard/Dashboard";
 import FavList from "./modules/Favourites/Components/FavList/FavList";
+import AddRecipe from "./modules/Recipes/Components/AddRecipe/AddRecipe";
 import RecipeData from "./modules/Recipes/Components/RecipeData/RecipeData";
 import RecipesList from "./modules/Recipes/Components/RecipesList/RecipesList";
 import NotFound from "./modules/Shared/Components/NotFound/NotFound";
 import UsersList from "./modules/Users/Components/UsersList/UsersList";
 import ProtectedRoutes from "./routes/ProtectedRoutes/ProtectedRoutes";
-import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import AddRecipe from "./modules/Recipes/Components/AddRecipe/AddRecipe";
 
 function App() {
   // move then improve
   // lifting state up
   // poc proof of concept
-  const [loginData, setLoginData] = useState(null);
-
-  const saveLoginData = () => {
-    const encodedToken = localStorage.getItem("token");
-    const decodedToken = jwtDecode(encodedToken);
-    setLoginData(decodedToken);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      saveLoginData();
-    }
-  }, []);
 
   const routes = createBrowserRouter([
     // Auth Routes
@@ -49,8 +33,8 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login saveLoginData={saveLoginData} /> },
-        { path: "login", element: <Login saveLoginData={saveLoginData} /> },
+        { index: true, element: <Login /> },
+        { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
@@ -61,21 +45,56 @@ function App() {
     {
       path: "dashboard",
       element: (
-        <ProtectedRoutes loginData={loginData}>
-          <MasterLayout loginData={loginData} setLoginData={setLoginData} />
+        <ProtectedRoutes>
+          <MasterLayout />
         </ProtectedRoutes>
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard loginData={loginData} /> },
-        { path: "", element: <Dashboard loginData={loginData} /> },
-        { path: "users", element: <UsersList /> },
+        { index: true, element: <Dashboard /> },
+        { path: "", element: <Dashboard /> },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin"]}>
+              <UsersList />
+            </ProtectedRoutes>
+          ),
+        },
         { path: "recipes", element: <RecipesList /> },
-        { path: "recipe-data", element: <RecipeData /> },
-        { path: "recipes/add-recipe", element: <AddRecipe /> },
-        { path: "recipes/edit-recipe/:id", element: <AddRecipe /> },
-        { path: "categories", element: <CategoriesList /> },
-        { path: "favorites", element: <FavList /> },
+        {
+          path: "recipes/add-recipe",
+
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin"]}>
+              <AddRecipe />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "recipes/edit-recipe/:id",
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin"]}>
+              <AddRecipe />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "categories",
+          element: (
+            <ProtectedRoutes allowedRoles={["SuperAdmin"]}>
+              <CategoriesList />
+            </ProtectedRoutes>
+          ),
+        },
+        {
+          path: "favorites",
+          element: (
+            <ProtectedRoutes allowedRoles={["SystemUser"]}>
+              <FavList />
+            </ProtectedRoutes>
+          ),
+        },
       ],
     },
   ]);

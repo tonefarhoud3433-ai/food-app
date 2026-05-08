@@ -1,24 +1,40 @@
+import { useEffect, useState } from "react";
 import { UsersAPI } from "../../../../api";
 import headerUsers from "../../../../assets/images/common/headerAllSections.png";
 import useDeleteItem from "../../../../hooks/useDeleteItem";
+import useDeleteModal from "../../../../hooks/useDeleteModal";
 import useFetchList from "../../../../hooks/useFetchList";
 import DataTable from "../../../Shared/Components/DataTable/DataTable";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
-import useDeleteModal from "../../../../hooks/useDeleteModal";
+import Pagination from "../../../Shared/Components/Pagination/Pagination";
+import FilterBar from "../../../Shared/Components/FilterBar/FilterBar";
 
 export default function UsersList() {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize] = useState(5);
+  const [filters, setFilters] = useState({
+    name: "",
+    tagId: "",
+    categoryId: "",
+  });
+
   const { show, selectedItem, open, close } = useDeleteModal();
 
-  const { data: usersList, refetch } = useFetchList(UsersAPI.getUsers);
+  const {
+    data: usersList,
+    refetch,
+    totalPages,
+  } = useFetchList(UsersAPI.getUsers, {
+    pageNumber,
+    pageSize,
+    userName: filters.name,
+  });
 
   const { deleteItem, deletingId } = useDeleteItem(
     UsersAPI.deleteUser,
     refetch,
-    // (id) => {
-    //   setData((prev) => prev.filter((item) => item.id !== id));
-    // },
   );
 
   const columns = [
@@ -26,6 +42,18 @@ export default function UsersList() {
     { key: "userName", label: "Name" },
     { key: "country", label: "Country" },
   ];
+
+  useEffect(() => {
+    if (usersList?.length === 0 && pageNumber > 1) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPageNumber((prev) => prev - 1);
+    }
+  }, [usersList, pageNumber]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPageNumber(1);
+  }, [filters]);
+
   return (
     <>
       <Header
@@ -59,15 +87,23 @@ export default function UsersList() {
           <p>You can check all details </p>
         </div>
       </div>
+      <FilterBar setFilters={setFilters} />
       <div className="table-container m-3">
         {usersList?.length > 0 ? (
-          <DataTable
-            columns={columns}
-            data={usersList}
-            onDelete={deleteItem}
-            deletingId={deletingId}
-            onShow={open}
-          />
+          <>
+            <DataTable
+              columns={columns}
+              data={usersList}
+              onDelete={deleteItem}
+              deletingId={deletingId}
+              onShow={open}
+            />
+            <Pagination
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              totalPages={totalPages}
+            />
+          </>
         ) : (
           <NoData />
         )}

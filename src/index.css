@@ -1,0 +1,53 @@
+.notfound-bg {
+  background-image: url(./assets/images/not-found/bg.png);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: contain;
+}
+@media (max-width: 768px) {
+  .image-wrapper-mobile {
+    position: absolute;
+    bottom: 0;
+    right: -10%;
+    width: 100%;
+    opacity: 0.4;
+    z-index: 1;
+  }
+
+  .content-container {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+  }
+}
+.view-modal .modal-content {
+  border-radius: 20px;
+  border: none;
+  overflow: hidden;
+}
+
+.bg-success-subtle {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+  font-size: 0.8rem;
+}
+
+.info-list span {
+  font-size: 0.95rem;
+}
+
+.info-list i {
+  width: 20px;
+  color: #198754;
+}
+/* إخفاء سهم الدروب داون */
+.no-caret::after {
+  display: none !important;
+}
+
+/* تحسين شكل الأيقونة */
+.dropdown-toggle i {
+  font-size: 1.2rem;
+  color: #1f1f1f;
+  cursor: pointer;
+}

@@ -1,4 +1,6 @@
-import { Table } from "react-bootstrap";
+import { Table, Dropdown } from "react-bootstrap";
+import { AuthContext } from "../../../../context/AuthContext";
+import { useContext } from "react";
 
 export default function DataTable({
   columns,
@@ -8,7 +10,11 @@ export default function DataTable({
   deletingId,
   onEdit,
   updatingId,
+  onView,
 }) {
+  const { loginData } = useContext(AuthContext);
+  const isAdmin = loginData?.userGroup === "SuperAdmin";
+
   return (
     <>
       <Table hover responsive>
@@ -17,7 +23,7 @@ export default function DataTable({
             {columns.map((col) => (
               <th key={col.key}>{col.label}</th>
             ))}
-            {onDelete && <th>Actions</th>}
+            <th className="text-center">Actions</th>
           </tr>
         </thead>
 
@@ -29,31 +35,55 @@ export default function DataTable({
                   {col.render ? col.render(item) : item[col.key]}
                 </td>
               ))}
-              {onDelete && (
-                <td className="align-middle">
-                  {deletingId === item.id ? (
-                    <span className="spinner-border spinner-border-sm text-danger"></span>
-                  ) : (
-                    <>
-                      {updatingId === item.id ? (
-                        <span className="spinner-border spinner-border-sm text-warning mx-2"></span>
-                      ) : (
-                        <i
-                          onClick={() => onEdit(item)}
-                          className="fa fa-edit text-warning mx-2"
-                          style={{ cursor: "pointer" }}
-                        ></i>
-                      )}
 
-                      <i
-                        onClick={() => onShow(item)}
-                        className="fa fa-trash text-danger"
-                        style={{ cursor: "pointer" }}
-                      ></i>
-                    </>
-                  )}
-                </td>
-              )}
+              <td className="align-middle text-center">
+                {deletingId === item.id || updatingId === item.id ? (
+                  <span className="spinner-border spinner-border-sm text-success"></span>
+                ) : (
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="link"
+                      id={`dropdown-${item.id}`}
+                      className="text-dark p-0 border-0 shadow-none no-caret"
+                    >
+                      <i className="fa-solid fa-ellipsis"></i>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="shadow-sm border-0">
+                      {!isAdmin ? (
+                        <Dropdown.Item
+                          onClick={() => onView(item)}
+                          className="py-2"
+                        >
+                          <i className="fa-regular fa-eye me-2 text-success"></i>{" "}
+                          View
+                        </Dropdown.Item>
+                      ) : (
+                        <>
+                          {onEdit && (
+                            <Dropdown.Item
+                              onClick={() => onEdit(item)}
+                              className="py-2 text-warning"
+                            >
+                              <i className="fa-regular fa-pen-to-square me-2"></i>{" "}
+                              Edit
+                            </Dropdown.Item>
+                          )}
+                          {onDelete && (
+                            <Dropdown.Item
+                              onClick={() => onShow(item)}
+                              className="py-2 text-danger"
+                            >
+                              <i className="fa-regular fa-trash-can me-2"></i>{" "}
+                              Delete
+                            </Dropdown.Item>
+                          )}
+                        </>
+                      )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

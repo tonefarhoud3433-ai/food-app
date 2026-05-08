@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "../../../Shared/Components/Header/Header";
 import headerGirl from "../../../../assets/images/common/headerGirl.png";
 import RecipeHeader from "../../../Shared/Components/RecipeHeader/RecipeHeader";
+import { AuthContext } from "../../../../context/AuthContext";
 
-export default function Dashboard({ loginData }) {
+export default function Dashboard() {
+  const { loginData } = useContext(AuthContext);
   return (
     <>
       <Header

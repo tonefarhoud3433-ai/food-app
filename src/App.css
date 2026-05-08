@@ -137,12 +137,10 @@
   background-size: cover;
   background-position: center;
 }
-.sidebar-container {
-  flex: 1;
-  position: sticky;
-  min-width: 0;
-  top: 0;
-  bottom: 0;
+.sidebar-container .ps-sidebar-container {
+  height: 100vh;
+  border-top-right-radius: 58px;
+  color: #fff;
 }
 .sidebar-container .ps-sidebar-root {
   border: none;

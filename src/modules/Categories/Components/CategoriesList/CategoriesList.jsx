@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CategoriesAPI } from "../../../../api";
 import headerCateges from "../../../../assets/images/common/headerAllSections.png";
@@ -12,8 +12,17 @@ import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/De
 import Header from "../../../Shared/Components/Header/Header";
 import NoData from "../../../Shared/Components/NoData/NoData";
 import useUpdateItem from "../../../../hooks/useUpdateItem";
+import Pagination from "../../../Shared/Components/Pagination/Pagination";
+import FilterBar from "../../../Shared/Components/FilterBar/FilterBar";
 
 export default function CategoriesList() {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize] = useState(5);
+  const [filters, setFilters] = useState({
+    name: "",
+    tagId: "",
+    categoryId: "",
+  });
   const [editingItem, setEditingItem] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const handleAddClose = () => setShowAdd(false);
@@ -37,16 +46,19 @@ export default function CategoriesList() {
 
   const { show, selectedItem, open, close } = useDeleteModal();
 
-  const { data: categoriesList, refetch } = useFetchList(
-    CategoriesAPI.getCategories,
-  );
+  const {
+    data: categoriesList,
+    refetch,
+    totalPages,
+  } = useFetchList(CategoriesAPI.getCategories, {
+    pageNumber,
+    pageSize,
+    name: filters.name,
+  });
 
   const { deleteItem, deletingId } = useDeleteItem(
     CategoriesAPI.deleteCategory,
     refetch,
-    // (id) => {
-    //   setData((prev) => prev.filter((item) => item.id !== id));
-    // },
   );
 
   const { createItem, loading } = useCreateItem(
@@ -72,6 +84,17 @@ export default function CategoriesList() {
           : "-",
     },
   ];
+  useEffect(() => {
+    if (categoriesList?.length === 0 && pageNumber > 1) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPageNumber((prev) => prev - 1);
+    }
+  }, [categoriesList, pageNumber]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPageNumber(1);
+  }, [filters]);
 
   return (
     <>
@@ -143,17 +166,25 @@ export default function CategoriesList() {
           Add New Category
         </button>
       </div>
+      <FilterBar setFilters={setFilters} />
       <div className="m-3">
         {categoriesList?.length > 0 ? (
-          <DataTable
-            columns={columns}
-            data={categoriesList}
-            onDelete={deleteItem}
-            deletingId={deletingId}
-            onShow={open}
-            onEdit={handleEditShow}
-            updatingId={updatingId}
-          />
+          <>
+            <DataTable
+              columns={columns}
+              data={categoriesList}
+              onDelete={deleteItem}
+              deletingId={deletingId}
+              onShow={open}
+              onEdit={handleEditShow}
+              updatingId={updatingId}
+            />
+            <Pagination
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              totalPages={totalPages}
+            />
+          </>
         ) : (
           <NoData />
         )}

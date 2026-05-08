@@ -3,8 +3,8 @@ import axiosClient from "../axiosClient";
 export const createCategory = (data) => {
   return axiosClient.post("/Category", data);
 };
-export const getCategories = () => {
-  return axiosClient.get("/Category");
+export const getCategories = (params) => {
+  return axiosClient.get("/Category", { params });
 };
 export const getCategoryById = (id) => {
   return axiosClient.get(`/Category/${id}`);

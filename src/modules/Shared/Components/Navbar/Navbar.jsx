@@ -1,5 +1,8 @@
+import { useContext } from "react";
 import userImg from "../../../../assets/images/common/avatar.png";
-export default function NavBar({ loginData }) {
+import { AuthContext } from "../../../../context/AuthContext";
+export default function NavBar() {
+  const { loginData } = useContext(AuthContext);
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary m-3 rounded rounded-4">
