@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import SideBar from "../../modules/Shared/Components/SideBar/SideBarr";
-import NavBar from "../../modules/Shared/Components/NavBar/NavBarr";
+import SideBar from "../../modules/Shared/Components/SideBar/SideBar";
+import NavBar from "../../modules/Shared/Components/NavBar/NavBar";
 
 export default function MasterLayout() {
   return (
